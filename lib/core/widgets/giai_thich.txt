@@ -1,0 +1,4 @@
+Shared Components
+UI đồng nhất
+Dễ tái sử dụng
+Sửa 1 nơi áp dụng toàn app

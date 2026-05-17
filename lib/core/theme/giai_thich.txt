@@ -1,0 +1,15 @@
+Chứa toàn bộ design system
+Nơi quản lý:
+. Màu sắc
+. Typography
+. Radius
+. Spacing
+. Shadow
+. Global theme
+Mục tiêu
+. User UI
+. Admin UI
+. Wallet
+. Product
+. Dashboard
+=> đều nhìn cùng hệ thống

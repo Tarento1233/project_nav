@@ -1,0 +1,5 @@
+Xương sống toàn bộ hệ thống
+Dùng chung cho toàn app
+Không thuộc riêng feature nào
+Đóng vai trò nền móng hệ thống 
+<<HỆ THỐNG HẠ TẦNG DÙNG CHUNG>>
