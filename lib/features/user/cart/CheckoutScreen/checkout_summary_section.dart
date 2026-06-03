@@ -1,12 +1,12 @@
-// features/user/checkout/checkout_summary_section.dart
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../providers/store_provider.dart';
 
 class CheckoutSummarySection extends StatelessWidget {
   const CheckoutSummarySection({super.key});
@@ -37,34 +37,48 @@ class CheckoutSummarySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+    return Consumer<StoreProvider>(
+      builder: (context, store, child) {
+        return Container(
+          padding: const EdgeInsets.all(AppSpacing.lg),
 
-      decoration: BoxDecoration(
-        color: AppColors.surface,
+          decoration: BoxDecoration(
+            color: AppColors.surface,
 
-        borderRadius: BorderRadius.circular(AppRadius.lg),
+            borderRadius: BorderRadius.circular(AppRadius.lg),
 
-        boxShadow: AppShadows.cardShadow,
-      ),
-
-      child: Column(
-        children: [
-          dongThongTin(tieuDe: 'Tạm tính', giaTri: '6.500.000đ'),
-
-          dongThongTin(tieuDe: 'Phí vận chuyển', giaTri: '39.000đ'),
-
-          dongThongTin(tieuDe: 'Giảm giá', giaTri: '-150.000đ'),
-
-          const Divider(),
-
-          dongThongTin(
-            tieuDe: 'Tổng thanh toán',
-            giaTri: '6.389.000đ',
-            tong: true,
+            boxShadow: AppShadows.cardShadow,
           ),
-        ],
-      ),
+
+          child: Column(
+            children: [
+              dongThongTin(
+                tieuDe: 'Tạm tính',
+                giaTri: '${store.cartSubtotal.toStringAsFixed(0)}đ',
+              ),
+
+              dongThongTin(
+                tieuDe: 'Phí vận chuyển',
+                giaTri: '${store.shippingFee.toStringAsFixed(0)}đ',
+              ),
+
+              if (store.discount > 0)
+                dongThongTin(
+                  tieuDe: 'Giảm giá',
+                  giaTri: '-${store.discount.toStringAsFixed(0)}đ',
+                ),
+
+              const Divider(),
+
+              dongThongTin(
+                tieuDe: 'Tổng thanh toán',
+                giaTri: '${store.cartTotal.toStringAsFixed(0)}đ',
+                tong: true,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

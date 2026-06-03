@@ -1,11 +1,13 @@
-// features/user/home/screens/home_screen.dart
+// features/user/home/home_screen.dart
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/constants/mock_data.dart';
+import '../../../features/user/product/product_detail_screen.dart';
+import '../../../features/user/cart/CartScreen/cart_screen.dart';
 
 import 'home_banner.dart';
-import 'home_bottom_navigation.dart';
 import 'home_header.dart';
 import 'category_list.dart';
 import 'featured_product_section.dart';
@@ -17,26 +19,33 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-
-      body: const SafeArea(
+      body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              HomeHeader(),
-
-              HomeBanner(),
-
-              CategoryList(),
-
-              FeaturedProductSection(),
+              // Header với icon giỏ hàng dẫn tới CartScreen
+              HomeHeader(
+                onGioHangTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CartScreen()),
+                ),
+              ),
+              const HomeBanner(),
+              const CategoryList(),
+              // Featured products dẫn tới ProductDetailScreen
+              FeaturedProductSection(
+                onSanPhamTap: (sanPham) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ProductDetailScreen(sanPham: sanPham),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
-
-      bottomNavigationBar: const HomeBottomNavigation(),
     );
   }
 }

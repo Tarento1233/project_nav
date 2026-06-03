@@ -1,13 +1,12 @@
-// features/user/product/screens/product_detail_screen.dart
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../models/product_model.dart';
-
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
-
 import '../../../../core/widgets/headers/custom_app_bar.dart';
+import '../../../../providers/store_provider.dart';
+import '../cart/CartScreen/cart_screen.dart';
 
 import 'product_image_slider.dart';
 import 'product_info_section.dart';
@@ -16,49 +15,79 @@ import 'size_selector.dart';
 import 'add_to_cart_section.dart';
 import 'related_product_section.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailScreen extends StatefulWidget {
   final SanPhamModel sanPham;
 
   const ProductDetailScreen({super.key, required this.sanPham});
 
   @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  String selectedSize = 'M';
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-
       appBar: const CustomAppBar(tieuDe: 'Chi tiết sản phẩm'),
-
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-
         child: Column(
           children: [
-            ProductImageSlider(danhSachAnh: sanPham.hinhAnh),
+            ProductImageSlider(danhSachAnh: widget.sanPham.hinhAnh),
 
             Padding(
               padding: const EdgeInsets.all(AppSpacing.lg),
-
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-
                 children: [
-                  ProductInfoSection(sanPham: sanPham),
+                  ProductInfoSection(sanPham: widget.sanPham),
 
                   const SizedBox(height: AppSpacing.xl),
 
-                  ProductPriceSection(sanPham: sanPham),
+                  ProductPriceSection(sanPham: widget.sanPham),
 
                   const SizedBox(height: AppSpacing.xl),
 
-                  const SizeSelector(),
+                  SizeSelector(
+                    selectedSize: selectedSize,
+                    onSelected: (size) {
+                      setState(() {
+                        selectedSize = size;
+                      });
+                    },
+                  ),
 
                   const SizedBox(height: AppSpacing.xl),
 
-                  AddToCartSection(sanPham: sanPham),
+                  AddToCartSection(
+                    sanPham: widget.sanPham,
+                    onAddToCart: () {
+                      final store = Provider.of<StoreProvider>(context, listen: false);
+                      store.addToCart(widget.sanPham, selectedSize);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Đã thêm ${widget.sanPham.ten} (Size $selectedSize) vào giỏ hàng'),
+                          duration: const Duration(seconds: 2),
+                          backgroundColor: AppColors.primary,
+                        ),
+                      );
+                    },
+                    onBuyNow: () {
+                      final store = Provider.of<StoreProvider>(context, listen: false);
+                      store.addToCart(widget.sanPham, selectedSize);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const CartScreen()),
+                      );
+                    },
+                  ),
 
                   const SizedBox(height: AppSpacing.xl),
 
-                  RelatedProductSection(sanPham: sanPham),
+                  RelatedProductSection(sanPham: widget.sanPham),
                 ],
               ),
             ),

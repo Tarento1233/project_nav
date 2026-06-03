@@ -8,7 +8,16 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 
 class QuantitySelector extends StatelessWidget {
-  const QuantitySelector({super.key});
+  final int quantity;
+  final VoidCallback onIncrement;
+  final VoidCallback onDecrement;
+
+  const QuantitySelector({
+    super.key,
+    required this.quantity,
+    required this.onIncrement,
+    required this.onDecrement,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +39,21 @@ class QuantitySelector extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
 
         children: [
-          const Icon(Icons.remove, size: 18),
+          GestureDetector(
+            onTap: onDecrement,
+            child: const Icon(Icons.remove, size: 18),
+          ),
 
           const SizedBox(width: AppSpacing.md),
 
-          Text('1', style: AppTypography.noiDung),
+          Text('$quantity', style: AppTypography.noiDung),
 
           const SizedBox(width: AppSpacing.md),
 
-          const Icon(Icons.add, size: 18),
+          GestureDetector(
+            onTap: onIncrement,
+            child: const Icon(Icons.add, size: 18),
+          ),
         ],
       ),
     );

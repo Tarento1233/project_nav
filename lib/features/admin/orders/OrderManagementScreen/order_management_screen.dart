@@ -1,13 +1,15 @@
-// features/admin/orders/order_management_screen.dart
+// features/admin/orders/OrderManagementScreen/order_management_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/constants/mock_data.dart';
-
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
-
 import '../../../../core/widgets/headers/custom_app_bar.dart';
+import '../../../../providers/store_provider.dart';
+import '../OrderDetailAdminScreen/admin_order_detail_screen.dart';
+
 
 import 'admin_order_card.dart';
 import 'order_search_bar.dart';
@@ -18,48 +20,46 @@ class OrderManagementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final danhSachDonHang = DuLieuMau.danhSachDonHang;
+    final store = Provider.of<StoreProvider>(context);
+    final danhSachDonHang = store.danhSachDonHang;
 
     return Scaffold(
       backgroundColor: AppColors.background,
-
-      appBar: const CustomAppBar(tieuDe: 'Quản lý đơn hàng'),
-
+      appBar: const CustomAppBar(tieuDe: 'Quản lý đơn hàng', hienThiNutBack: false),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(AppSpacing.lg),
-
-            child: Column(
-              children: [
-                OrderSearchBar(),
-
-                SizedBox(height: AppSpacing.lg),
-
-                OrderStatusFilter(),
-              ],
-            ),
-          ),
-
+          const OrderSearchBar(),
+          const OrderStatusFilter(),
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-
-              itemCount: danhSachDonHang.length,
-
-              separatorBuilder: (_, __) =>
-                  const SizedBox(height: AppSpacing.lg),
-
-              itemBuilder: (context, index) {
-                return AdminOrderCard(
-                  donHang: danhSachDonHang[index],
-
-                  onDetail: () {},
-
-                  onUpdate: () {},
-                );
-              },
-            ),
+            child: danhSachDonHang.isEmpty
+                ? const Center(
+                    child: Text('Không có đơn hàng nào'),
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    itemCount: danhSachDonHang.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.lg),
+                    itemBuilder: (context, index) {
+                      final donHang = danhSachDonHang[index];
+                      return AdminOrderCard(
+                        donHang: donHang,
+                        onDetail: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AdminOrderDetailScreen(donHang: donHang),
+                          ),
+                        ),
+                        onUpdate: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AdminOrderDetailScreen(donHang: donHang),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
           ),
         ],
       ),

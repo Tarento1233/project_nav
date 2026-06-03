@@ -1,15 +1,11 @@
-// features/user/cart/cart_screen.dart
-
 import 'package:flutter/material.dart';
-
-import '../../../../core/constants/mock_data.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
-
 import '../../../../core/widgets/headers/custom_app_bar.dart';
-// ignore: unused_import
-import '../../../../core/widgets/buttons/primary_button.dart';
+import '../../../../providers/store_provider.dart';
+import '../../cart/CheckoutScreen/checkout_screen.dart';
 
 import 'cart_item_card.dart';
 import 'cart_summary_section.dart';
@@ -20,34 +16,60 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final danhSachGioHang = DuLieuMau.danhSachSanPham;
-
     return Scaffold(
       backgroundColor: AppColors.background,
-
       appBar: const CustomAppBar(tieuDe: 'Giỏ hàng'),
+      body: Consumer<StoreProvider>(
+        builder: (context, store, child) {
+          final danhSachGioHang = store.danhSachGioHangCaNhan;
 
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.all(AppSpacing.lg),
+          if (danhSachGioHang.isEmpty) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.shopping_bag_outlined,
+                    size: 64,
+                    color: AppColors.textSecondary,
+                  ),
+                  SizedBox(height: AppSpacing.md),
+                  Text(
+                    'Giỏ hàng của bạn đang trống',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
 
-              itemCount: danhSachGioHang.length,
-
-              separatorBuilder: (_, __) =>
-                  const SizedBox(height: AppSpacing.lg),
-
-              itemBuilder: (context, index) {
-                return CartItemCard(sanPham: danhSachGioHang[index]);
-              },
-            ),
-          ),
-
-          const CartSummarySection(),
-
-          CheckoutBottomBar(tongTien: 6890000, onCheckout: () {}),
-        ],
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  itemCount: danhSachGioHang.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.lg),
+                  itemBuilder: (context, index) {
+                    return CartItemCard(cartItem: danhSachGioHang[index]);
+                  },
+                ),
+              ),
+              const CartSummarySection(),
+              CheckoutBottomBar(
+                tongTien: store.cartTotal,
+                onCheckout: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CheckoutScreen()),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

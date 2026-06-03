@@ -1,8 +1,11 @@
 // features/user/cart/cart_item_card.dart
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../models/cart_model.dart';
 import '../../../../models/product_model.dart';
+import '../../../../providers/store_provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
@@ -15,12 +18,35 @@ import '../../../../core/widgets/common/network_image_widget.dart';
 import 'quantity_selector.dart';
 
 class CartItemCard extends StatelessWidget {
-  final SanPhamModel sanPham;
+  final GioHangModel cartItem;
 
-  const CartItemCard({super.key, required this.sanPham});
+  const CartItemCard({super.key, required this.cartItem});
 
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<StoreProvider>(context);
+    final sanPham = store.danhSachSanPham.firstWhere(
+      (p) => p.id == cartItem.sanPhamId,
+      orElse: () => SanPhamModel(
+        id: '',
+        ten: 'Sản phẩm đã xóa',
+        moTa: '',
+        gia: 0,
+        giaGoc: 0,
+        phanTramGiamGia: 0,
+        hinhAnh: ['https://images.unsplash.com/photo-1595777457583-95e059d581b8'],
+        thuongHieuId: '',
+        danhMucId: '',
+        kichThuoc: '',
+        tinhTrang: '',
+        trangThai: '',
+        tonKho: 0,
+        noiBat: false,
+        nguoiBanId: '',
+        ngayTao: DateTime.now(),
+      ),
+    );
+
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
 
@@ -63,7 +89,7 @@ class CartItemCard extends StatelessWidget {
 
                 const SizedBox(height: AppSpacing.sm),
 
-                Text('Size: ${sanPham.kichThuoc}', style: AppTypography.moTa),
+                Text('Size: ${cartItem.kichThuocDaChon}', style: AppTypography.moTa),
 
                 const SizedBox(height: AppSpacing.md),
 
@@ -75,13 +101,17 @@ class CartItemCard extends StatelessWidget {
 
                 const SizedBox(height: AppSpacing.md),
 
-                const QuantitySelector(),
+                QuantitySelector(
+                  quantity: cartItem.soLuong,
+                  onIncrement: () => store.updateCartQuantity(cartItem.id, 1),
+                  onDecrement: () => store.updateCartQuantity(cartItem.id, -1),
+                ),
               ],
             ),
           ),
 
           IconButton(
-            onPressed: () {},
+            onPressed: () => store.removeFromCart(cartItem.id),
 
             icon: const Icon(
               Icons.delete_outline_rounded,

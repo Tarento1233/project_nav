@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../models/order_model.dart';
+import '../../../../providers/store_provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
@@ -19,6 +21,9 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<StoreProvider>(context);
+    final count = store.danhSachChiTietDonHang.where((i) => i.donHangId == donHang.id).length;
+
     return GestureDetector(
       onTap: onTap,
 
@@ -49,7 +54,7 @@ class OrderCard extends StatelessWidget {
 
             const SizedBox(height: AppSpacing.md),
 
-            Text('4 sản phẩm', style: AppTypography.moTa),
+            Text('$count sản phẩm', style: AppTypography.moTa),
 
             const SizedBox(height: AppSpacing.sm),
 

@@ -9,48 +9,50 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 
 class ProfileQuickAction extends StatelessWidget {
-  const ProfileQuickAction({super.key});
+  final VoidCallback? onDonHangTap;
+  final VoidCallback? onViTap;
+  final VoidCallback? onKyGuiTap;
 
-  Widget actionItem({required IconData icon, required String title}) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
-
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-
-          boxShadow: AppShadows.cardShadow,
-        ),
-
-        child: Column(
-          children: [
-            Icon(icon, color: AppColors.primary, size: 28),
-
-            const SizedBox(height: AppSpacing.sm),
-
-            Text(title, style: AppTypography.moTa),
-          ],
-        ),
-      ),
-    );
-  }
+  const ProfileQuickAction({
+    super.key,
+    this.onDonHangTap,
+    this.onViTap,
+    this.onKyGuiTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        actionItem(icon: Icons.shopping_bag_outlined, title: 'Đơn hàng'),
-
+        _actionItem(icon: Icons.shopping_bag_outlined, title: 'Đơn hàng', onTap: onDonHangTap),
         const SizedBox(width: AppSpacing.md),
-
-        actionItem(icon: Icons.account_balance_wallet_outlined, title: 'Ví'),
-
+        _actionItem(icon: Icons.account_balance_wallet_outlined, title: 'Ví', onTap: onViTap),
         const SizedBox(width: AppSpacing.md),
-
-        actionItem(icon: Icons.inventory_2_outlined, title: 'Ký gửi'),
+        _actionItem(icon: Icons.inventory_2_outlined, title: 'Ký gửi', onTap: onKyGuiTap),
       ],
+    );
+  }
+
+  Widget _actionItem({required IconData icon, required String title, VoidCallback? onTap}) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            boxShadow: AppShadows.cardShadow,
+          ),
+          child: Column(
+            children: [
+              Icon(icon, color: AppColors.primary, size: 28),
+              const SizedBox(height: AppSpacing.sm),
+              Text(title, style: AppTypography.moTa),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

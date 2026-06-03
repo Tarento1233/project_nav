@@ -11,21 +11,34 @@ import '../../../../core/widgets/buttons/secondary_button.dart';
 
 class AddToCartSection extends StatelessWidget {
   final SanPhamModel sanPham;
+  final VoidCallback onAddToCart;
+  final VoidCallback onBuyNow;
 
-  const AddToCartSection({super.key, required this.sanPham});
+  const AddToCartSection({
+    super.key,
+    required this.sanPham,
+    required this.onAddToCart,
+    required this.onBuyNow,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
-          child: SecondaryButton(tieuDe: 'Thêm giỏ hàng', onPressed: () {}),
+          child: SecondaryButton(
+            tieuDe: 'Thêm giỏ hàng',
+            onPressed: onAddToCart,
+          ),
         ),
 
         const SizedBox(width: AppSpacing.md),
 
         Expanded(
-          child: PrimaryButton(tieuDe: 'Mua ngay', onPressed: () {}),
+          child: PrimaryButton(
+            tieuDe: 'Mua ngay',
+            onPressed: onBuyNow,
+          ),
         ),
       ],
     );

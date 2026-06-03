@@ -9,16 +9,21 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 
 class PaymentMethodSelector extends StatelessWidget {
-  const PaymentMethodSelector({super.key});
+  final String selectedMethod;
+  final ValueChanged<String> onChanged;
+
+  const PaymentMethodSelector({
+    super.key,
+    required this.selectedMethod,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     final methods = [
-      'Thanh toán khi nhận hàng',
-
-      'Ví OutletPay',
-
-      'Chuyển khoản ngân hàng',
+      {'code': 'COD', 'label': 'Thanh toán khi nhận hàng'},
+      {'code': 'WALLET', 'label': 'Ví OutletPay'},
+      {'code': 'BANKING', 'label': 'Chuyển khoản ngân hàng'},
     ];
 
     return Container(
@@ -41,35 +46,43 @@ class PaymentMethodSelector extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
 
           ...methods.map((method) {
-            final dangChon = method == methods.first;
+            final dangChon = method['code'] == selectedMethod;
 
-            return Container(
-              margin: const EdgeInsets.only(bottom: AppSpacing.md),
+            return GestureDetector(
+              onTap: () => onChanged(method['code']!),
+              child: Container(
+                margin: const EdgeInsets.only(bottom: AppSpacing.md),
 
-              padding: const EdgeInsets.all(AppSpacing.md),
+                padding: const EdgeInsets.all(AppSpacing.md),
 
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppRadius.md),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(AppRadius.md),
 
-                border: Border.all(
-                  color: dangChon ? AppColors.primary : AppColors.border,
-                ),
-              ),
-
-              child: Row(
-                children: [
-                  Icon(
-                    dangChon
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_off,
-
-                    color: AppColors.primary,
+                  border: Border.all(
+                    color: dangChon ? AppColors.primary : AppColors.border,
                   ),
+                ),
 
-                  const SizedBox(width: AppSpacing.md),
+                child: Row(
+                  children: [
+                    Icon(
+                      dangChon
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_off,
 
-                  Expanded(child: Text(method, style: AppTypography.noiDung)),
-                ],
+                      color: AppColors.primary,
+                    ),
+
+                    const SizedBox(width: AppSpacing.md),
+
+                    Expanded(
+                      child: Text(
+                        method['label']!,
+                        style: AppTypography.noiDung,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }),

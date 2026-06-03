@@ -32,22 +32,16 @@ class ConsignmentDetailScreen extends StatelessWidget {
         child: Column(
           children: [
             ConsignmentProductInfo(sanPham: sanPham),
-
             const SizedBox(height: AppSpacing.xl),
-
             ConsignmentStatusCard(trangThai: sanPham.trangThai),
-
             const SizedBox(height: AppSpacing.xl),
-
-            const ConsignmentTermDetail(),
-
+            ConsignmentTermDetail(sanPham: sanPham),
             const SizedBox(height: AppSpacing.xl),
-
-            const ConsignmentRevenueCard(),
-
+            ConsignmentRevenueCard(sanPham: sanPham),
             const SizedBox(height: 100),
           ],
         ),
+
       ),
     );
   }

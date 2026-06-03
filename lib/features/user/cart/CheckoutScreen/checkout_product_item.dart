@@ -14,8 +14,15 @@ import '../../../../core/widgets/common/network_image_widget.dart';
 
 class CheckoutProductItem extends StatelessWidget {
   final SanPhamModel sanPham;
+  final String size;
+  final int quantity;
 
-  const CheckoutProductItem({super.key, required this.sanPham});
+  const CheckoutProductItem({
+    super.key,
+    required this.sanPham,
+    required this.size,
+    required this.quantity,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +66,7 @@ class CheckoutProductItem extends StatelessWidget {
 
                 const SizedBox(height: AppSpacing.sm),
 
-                Text('Size: ${sanPham.kichThuoc}', style: AppTypography.moTa),
+                Text('Size: $size', style: AppTypography.moTa),
 
                 const SizedBox(height: AppSpacing.sm),
 
@@ -72,7 +79,7 @@ class CheckoutProductItem extends StatelessWidget {
             ),
           ),
 
-          Text('x1', style: AppTypography.noiDung),
+          Text('x$quantity', style: AppTypography.noiDung),
         ],
       ),
     );

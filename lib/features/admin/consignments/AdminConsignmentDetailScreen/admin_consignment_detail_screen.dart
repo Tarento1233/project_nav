@@ -34,26 +34,18 @@ class AdminConsignmentDetailScreen extends StatelessWidget {
         child: Column(
           children: [
             ConsignmentProductInfo(sanPham: sanPham),
-
             const SizedBox(height: AppSpacing.xl),
-
-            const ConsignorInfoCard(),
-
+            ConsignorInfoCard(sanPham: sanPham),
             const SizedBox(height: AppSpacing.xl),
-
             ConsignmentStatusAdminCard(trangThai: sanPham.trangThai),
-
             const SizedBox(height: AppSpacing.xl),
-
-            const ConsignmentTermAdminCard(),
-
+            ConsignmentTermAdminCard(sanPham: sanPham),
             const SizedBox(height: AppSpacing.xl),
-
-            const ConsignmentActionSection(),
-
+            ConsignmentActionSection(sanPham: sanPham),
             const SizedBox(height: 100),
           ],
         ),
+
       ),
     );
   }

@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/mock_data.dart';
-
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
-
 import '../../../core/widgets/headers/custom_app_bar.dart';
+import 'CreateProductScreen/create_product_screen.dart';
+import 'EditProductScreen/edit_product_screen.dart';
 
 import 'admin_product_card.dart';
 import 'product_search_bar.dart';
@@ -23,42 +23,40 @@ class ProductManagementScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-
-      appBar: const CustomAppBar(tieuDe: 'Quản lý sản phẩm'),
-
-      floatingActionButton: const AddProductButton(),
-
+      appBar: const CustomAppBar(tieuDe: 'Quản lý sản phẩm', hienThiNutBack: false),
+      // FAB → CreateProductScreen
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CreateProductScreen()),
+        ),
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(AppSpacing.lg),
-
-            child: Column(
-              children: [
-                ProductSearchBar(),
-
-                SizedBox(height: AppSpacing.lg),
-
-                ProductFilterSection(),
-              ],
-            ),
-          ),
-
+          const ProductSearchBar(),
+          const ProductFilterSection(),
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-
+            child: GridView.builder(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 0.7,
+              ),
               itemCount: danhSachSanPham.length,
-
-              separatorBuilder: (_, __) =>
-                  const SizedBox(height: AppSpacing.lg),
-
               itemBuilder: (context, index) {
+                final sanPham = danhSachSanPham[index];
                 return AdminProductCard(
-                  sanPham: danhSachSanPham[index],
-
-                  onEdit: () {},
-
+                  sanPham: sanPham,
+                  onEdit: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EditProductScreen(sanPham: sanPham),
+                    ),
+                  ),
                   onDelete: () {},
                 );
               },

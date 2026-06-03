@@ -8,19 +8,29 @@ import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_shadows.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../../../models/product_model.dart';
+import '../../../../providers/store_provider.dart';
+
 class ConsignorInfoCard extends StatelessWidget {
-  const ConsignorInfoCard({super.key});
+  final SanPhamModel sanPham;
+
+  const ConsignorInfoCard({super.key, required this.sanPham});
 
   Widget thongTin({required String title, required String value}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
-
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
         children: [
           Text(title, style: AppTypography.moTa),
-
           Text(value, style: AppTypography.noiDung),
         ],
       ),
@@ -29,34 +39,33 @@ class ConsignorInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<StoreProvider>(context);
+    final user = store.danhSachNguoiDung.firstWhere(
+      (u) => u.id == sanPham.nguoiBanId,
+      orElse: () => store.danhSachNguoiDung.first,
+    );
+    
+    final dateStr = '${sanPham.ngayTao.day.toString().padLeft(2, '0')}/${sanPham.ngayTao.month.toString().padLeft(2, '0')}/${sanPham.ngayTao.year}';
+
     return Container(
       width: double.infinity,
-
       padding: const EdgeInsets.all(AppSpacing.lg),
-
       decoration: BoxDecoration(
         color: AppColors.surface,
-
         borderRadius: BorderRadius.circular(AppRadius.lg),
-
         boxShadow: AppShadows.cardShadow,
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
           Text('Thông tin người gửi', style: AppTypography.tieuDeNho),
-
           const SizedBox(height: AppSpacing.lg),
-
-          thongTin(title: 'Người gửi', value: 'USER_01'),
-
-          thongTin(title: 'Ngày gửi', value: '12/05/2026'),
-
-          thongTin(title: 'Số điện thoại', value: '0901234567'),
+          thongTin(title: 'Người gửi', value: user.ten),
+          thongTin(title: 'Ngày gửi', value: dateStr),
+          thongTin(title: 'Số điện thoại', value: user.soDienThoai),
         ],
       ),
     );
   }
 }
+
