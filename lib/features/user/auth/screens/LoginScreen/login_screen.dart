@@ -1,22 +1,6 @@
 // features/user/auth/screens/LoginScreen/login_screen.dart
 
 import 'package:flutter/material.dart';
-
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_spacing.dart';
-import '../../../../../core/widgets/buttons/primary_button.dart';
-import '../../../../../core/navigation/user_tab_navigation.dart';
-import '../../widgets/auth_banner.dart';
-import '../../widgets/auth_header.dart';
-import '../../widgets/auth_text_field.dart';
-import '../../widgets/password_text_field.dart';
-import '../../widgets/social_login_button.dart';
-import '../../widgets/auth_footer.dart';
-import '../../widgets/auth_divider.dart';
-import '../RegisterScreen/register_screen.dart';
-import '../ForgotPassWordScreen/forgot_password_screen.dart';
-
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/theme/app_colors.dart';
@@ -43,7 +27,63 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String _selectedUserId = 'USER01';
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _dangNhap() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Vui lòng điền đầy đủ Email và Mật khẩu!'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final store = Provider.of<StoreProvider>(context, listen: false);
+    final errorMsg = await store.loginWithEmailAndPassword(email, password);
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+
+    if (errorMsg == null) {
+      if (mounted) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const RootNavigation()),
+          (route) => false,
+        );
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMsg),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +104,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 subtitle: 'Đăng nhập để tiếp tục mua sắm',
               ),
               const SizedBox(height: AppSpacing.xl),
-              const AuthTextField(
+              AuthTextField(
+                controller: _emailController,
                 hintText: 'Email',
                 prefixIcon: Icons.email_outlined,
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: AppSpacing.lg),
-              const PasswordTextField(),
+              PasswordTextField(
+                controller: _passwordController,
+              ),
               const SizedBox(height: AppSpacing.md),
               Align(
                 alignment: Alignment.centerRight,
@@ -82,76 +125,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Text('Quên mật khẩu?'),
                 ),
               ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.md),
               
-              Text(
-                'Tài khoản đăng nhập thử nghiệm:',
-                style: AppTypography.noiDung.copyWith(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: _selectedUserId,
-                    isExpanded: true,
-                    items: const [
-                      DropdownMenuItem(
-                        value: 'USER01',
-                        child: Text('Khách hàng ký gửi (Nguyễn Văn A)'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'USER02',
-                        child: Text('Khách hàng mua sắm (Nguyễn Văn B)'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'ADMIN01',
-                        child: Text('Chủ cửa hàng (Admin)'),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          _selectedUserId = value;
-                        });
-                      }
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xl),
+
               
-              PrimaryButton(
-                tieuDe: 'Đăng nhập',
-                onPressed: () {
-                  final store = Provider.of<StoreProvider>(context, listen: false);
-                  store.switchUser(_selectedUserId);
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => const RootNavigation()),
-                    (route) => false,
-                  );
-                },
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              const AuthDivider(),
-              const SizedBox(height: AppSpacing.xl),
-              SocialLoginButton(
-                title: 'Tiếp tục với Google',
-                imagePath: 'assets/icons/google.png',
-                onPressed: () {},
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              SocialLoginButton(
-                title: 'Tiếp tục với Facebook',
-                imagePath: 'assets/icons/facebook.png',
-                onPressed: () {},
-              ),
+              _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(color: AppColors.primary),
+                    )
+                  : PrimaryButton(
+                      tieuDe: 'Đăng nhập',
+                      onPressed: _dangNhap,
+                    ),
               const SizedBox(height: AppSpacing.xl),
               AuthFooter(
                 text: 'Chưa có tài khoản? ',
@@ -168,5 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+
 }
 

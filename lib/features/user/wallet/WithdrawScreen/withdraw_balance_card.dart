@@ -1,14 +1,6 @@
 // features/user/wallet/withdraw_balance_card.dart
 
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_shadows.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_typography.dart';
-
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -44,7 +36,7 @@ class WithdrawBalanceCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
-            '${soDu.toStringAsFixed(0)}đ',
+            soDu.toVND(),
             style: AppTypography.gia.copyWith(
               color: Colors.white,
               fontSize: 30,

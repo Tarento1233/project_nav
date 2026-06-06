@@ -25,7 +25,18 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  String selectedSize = 'M';
+  late String selectedSize;
+  late List<String> availableSizes;
+
+  @override
+  void initState() {
+    super.initState();
+    availableSizes = widget.sanPham.kichThuoc
+        .split(', ')
+        .where((s) => s.isNotEmpty)
+        .toList();
+    selectedSize = availableSizes.isNotEmpty ? availableSizes.first : 'M';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +63,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   const SizedBox(height: AppSpacing.xl),
 
                   SizeSelector(
+                    sizes: availableSizes,
                     selectedSize: selectedSize,
                     onSelected: (size) {
                       setState(() {

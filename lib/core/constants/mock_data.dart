@@ -12,6 +12,8 @@ class DuLieuMau {
     "Phụ kiện",
 
     "Áo thun",
+
+    "Khác",
   ];
 
   static List<String> thuongHieu = [

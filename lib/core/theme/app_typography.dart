@@ -51,3 +51,12 @@ class AppTypography {
     color: Colors.white,
   );
 }
+
+extension DinhDangTien on num {
+  String toVND() {
+    String str = toStringAsFixed(0);
+    RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+    String formatted = str.replaceAllMapped(reg, (Match m) => '${m[1]}.');
+    return '${formatted}đ';
+  }
+}

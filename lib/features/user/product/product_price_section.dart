@@ -19,12 +19,12 @@ class ProductPriceSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
 
       children: [
-        Text('${sanPham.gia.toStringAsFixed(0)}đ', style: AppTypography.gia),
+        Text(sanPham.gia.toVND(), style: AppTypography.gia),
 
         const SizedBox(width: AppSpacing.md),
 
         Text(
-          '${sanPham.giaGoc.toStringAsFixed(0)}đ',
+          sanPham.giaGoc.toVND(),
 
           style: AppTypography.giaGiam,
         ),

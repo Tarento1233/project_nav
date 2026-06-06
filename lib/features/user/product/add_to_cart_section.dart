@@ -23,6 +23,13 @@ class AddToCartSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (sanPham.tonKho <= 0 || sanPham.trangThai == 'DA_BAN') {
+      return const PrimaryButton(
+        tieuDe: 'Hết hàng',
+        onPressed: null,
+      );
+    }
+
     return Row(
       children: [
         Expanded(

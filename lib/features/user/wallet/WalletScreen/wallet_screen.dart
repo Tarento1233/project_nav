@@ -1,22 +1,11 @@
 // features/user/wallet/WalletScreen/wallet_screen.dart
 
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/widgets/headers/custom_app_bar.dart';
-import '../WithdrawScreen/withdraw_screen.dart';
-
-import 'wallet_balance_card.dart';
-import 'revenue_summary_card.dart';
-import 'transaction_card.dart';
-import 'withdraw_button_section.dart';
-
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/headers/custom_app_bar.dart';
 import '../../../../providers/store_provider.dart';
 import '../WithdrawScreen/withdraw_screen.dart';
@@ -92,7 +81,7 @@ class WalletScreen extends StatelessWidget {
                   child: TransactionCard(
                     tieuDe: tx.moTa.isNotEmpty ? tx.moTa : labelType,
                     thoiGian: dateStr,
-                    soTien: '$amountPrefix${tx.soTien.toStringAsFixed(0)}đ',
+                    soTien: '$amountPrefix${tx.soTien.toVND()}',
                     trangThai: statusLabel,
                   ),
                 );

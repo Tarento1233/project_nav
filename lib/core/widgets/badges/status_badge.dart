@@ -13,11 +13,13 @@ class StatusBadge extends StatelessWidget {
     switch (trangThai.toUpperCase()) {
       case 'CHO_XAC_NHAN':
       case 'CHO_DUYET':
+      case 'DANG_XU_LY':
         return AppColors.warning.withOpacity(0.15);
 
       case 'DA_XAC_NHAN':
       case 'DA_DUYET':
       case 'THANH_CONG':
+      case 'HOAN_THANH':
         return AppColors.success.withOpacity(0.15);
 
       case 'DANG_GIAO':
@@ -42,11 +44,13 @@ class StatusBadge extends StatelessWidget {
     switch (trangThai.toUpperCase()) {
       case 'CHO_XAC_NHAN':
       case 'CHO_DUYET':
+      case 'DANG_XU_LY':
         return AppColors.warning;
 
       case 'DA_XAC_NHAN':
       case 'DA_DUYET':
       case 'THANH_CONG':
+      case 'HOAN_THANH':
         return AppColors.success;
 
       case 'DANG_GIAO':
@@ -75,6 +79,9 @@ class StatusBadge extends StatelessWidget {
       case 'CHO_DUYET':
         return 'Chờ duyệt';
 
+      case 'DANG_XU_LY':
+        return 'Đang xử lý';
+
       case 'DA_XAC_NHAN':
         return 'Đã xác nhận';
 
@@ -91,7 +98,7 @@ class StatusBadge extends StatelessWidget {
         return 'Đang bán';
 
       case 'DA_BAN':
-        return 'Đã bán';
+        return 'Hết hàng';
 
       case 'DA_HUY':
         return 'Đã hủy';
@@ -101,6 +108,9 @@ class StatusBadge extends StatelessWidget {
 
       case 'THANH_CONG':
         return 'Thành công';
+
+      case 'HOAN_THANH':
+        return 'Hoàn thành';
 
       case 'THAT_BAI':
         return 'Thất bại';

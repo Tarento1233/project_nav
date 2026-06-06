@@ -6,11 +6,14 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 
 class ProductSearchBar extends StatelessWidget {
-  const ProductSearchBar({super.key});
+  final TextEditingController? controller;
+
+  const ProductSearchBar({super.key, this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       decoration: InputDecoration(
         hintText: 'Tìm sản phẩm...',
 

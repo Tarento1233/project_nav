@@ -1,8 +1,9 @@
-// features/admin/orders/admin_order_card.dart
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../models/order_model.dart';
+import '../../../../models/user_model.dart';
+import '../../../../providers/store_provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
@@ -30,6 +31,20 @@ class AdminOrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<StoreProvider>(context);
+    final user = store.danhSachNguoiDung.firstWhere(
+      (u) => u.id == donHang.nguoiDungId,
+      orElse: () => NguoiDungModel(
+        id: donHang.nguoiDungId,
+        ten: 'Khách hàng (${donHang.nguoiDungId.length > 6 ? donHang.nguoiDungId.substring(0, 6) : donHang.nguoiDungId})',
+        email: '',
+        soDienThoai: '',
+        avatar: '',
+        vaiTro: 'USER',
+        ngayTao: DateTime.now(),
+      ),
+    );
+
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
 
@@ -58,7 +73,7 @@ class AdminOrderCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
 
           Text(
-            'Khách hàng: ${donHang.nguoiDungId}',
+            'Khách hàng: ${user.ten}',
 
             style: AppTypography.noiDung,
           ),
@@ -66,7 +81,7 @@ class AdminOrderCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
 
           Text(
-            'Tổng tiền: ${donHang.tongTien.toStringAsFixed(0)}đ',
+            'Tổng tiền: ${donHang.tongTien.toVND()}',
 
             style: AppTypography.gia,
           ),

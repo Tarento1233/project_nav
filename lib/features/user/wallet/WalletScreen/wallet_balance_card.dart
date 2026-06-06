@@ -1,14 +1,6 @@
 // features/user/wallet/wallet_balance_card.dart
 
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_shadows.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_typography.dart';
-
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -67,7 +59,7 @@ class WalletBalanceCard extends StatelessWidget {
       if (amount >= 1000000) {
         return '${(amount / 1000000).toStringAsFixed(1)} triệu';
       }
-      return '${amount.toStringAsFixed(0)}đ';
+      return amount.toVND();
     }
 
     return Container(
@@ -87,7 +79,7 @@ class WalletBalanceCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
-            '${soDuInt.toStringAsFixed(0)}đ',
+            soDuInt.toVND(),
             style: AppTypography.gia.copyWith(
               color: Colors.white,
               fontSize: 32,
@@ -96,7 +88,7 @@ class WalletBalanceCard extends StatelessWidget {
           if ((wallet?.soDuDangCho ?? 0) > 0) ...[
             const SizedBox(height: 8),
             Text(
-              'Đang chờ xử lý: ${wallet!.soDuDangCho.toStringAsFixed(0)}đ',
+              'Đang chờ xử lý: ${wallet!.soDuDangCho.toVND()}',
               style: AppTypography.moTa.copyWith(color: Colors.white60),
             ),
           ],

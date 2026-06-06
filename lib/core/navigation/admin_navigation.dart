@@ -14,11 +14,17 @@ class AdminNavigation extends StatefulWidget {
   const AdminNavigation({super.key});
 
   @override
-  State<AdminNavigation> createState() => _AdminNavigationState();
+  State<AdminNavigation> createState() => AdminNavigationState();
 }
 
-class _AdminNavigationState extends State<AdminNavigation> {
+class AdminNavigationState extends State<AdminNavigation> {
   int _viTriHienTai = 0;
+
+  void setTab(int index) {
+    setState(() {
+      _viTriHienTai = index;
+    });
+  }
 
   final List<Widget> _danhSachTab = const [
     DashboardScreen(),
@@ -41,7 +47,7 @@ class _AdminNavigationState extends State<AdminNavigation> {
         selectedItemColor: AppColors.primaryDark,
         unselectedItemColor: AppColors.textSecondary,
         backgroundColor: AppColors.surface,
-        onTap: (index) => setState(() => _viTriHienTai = index),
+        onTap: (index) => setTab(index),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard_outlined),

@@ -6,7 +6,14 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 
 class ConsignmentFilterSection extends StatelessWidget {
-  const ConsignmentFilterSection({super.key});
+  final String selectedStatus;
+  final ValueChanged<String> onStatusChanged;
+
+  const ConsignmentFilterSection({
+    super.key,
+    required this.selectedStatus,
+    required this.onStatusChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,33 +21,28 @@ class ConsignmentFilterSection extends StatelessWidget {
 
     return SizedBox(
       height: 45,
-
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-
         itemCount: filters.length,
-
         separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.md),
-
         itemBuilder: (context, index) {
-          final selected = index == 0;
+          final filter = filters[index];
+          final selected = filter == selectedStatus;
 
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-
-            decoration: BoxDecoration(
-              color: selected ? AppColors.primary : AppColors.surface,
-
-              borderRadius: BorderRadius.circular(14),
-
-              border: Border.all(color: AppColors.border),
-            ),
-
-            child: Text(
-              filters[index],
-
-              style: TextStyle(
-                color: selected ? Colors.white : AppColors.textPrimary,
+          return GestureDetector(
+            onTap: () => onStatusChanged(filter),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              decoration: BoxDecoration(
+                color: selected ? AppColors.primary : AppColors.surface,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Text(
+                filter,
+                style: TextStyle(
+                  color: selected ? Colors.white : AppColors.textPrimary,
+                ),
               ),
             ),
           );

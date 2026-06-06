@@ -67,9 +67,9 @@ class ConsignmentTermAdminCard extends StatelessWidget {
         children: [
           Text('Điều khoản ký gửi', style: AppTypography.tieuDeNho),
           const SizedBox(height: AppSpacing.lg),
-          thongTin(title: 'Giá mong muốn', value: '${kyGui.giaMongMuon.toStringAsFixed(0)}đ'),
+          thongTin(title: 'Giá mong muốn', value: kyGui.giaMongMuon.toVND()),
           if (!isPending)
-            thongTin(title: 'Giá được duyệt', value: '${kyGui.giaDuocDuyet.toStringAsFixed(0)}đ'),
+            thongTin(title: 'Giá được duyệt', value: kyGui.giaDuocDuyet.toVND()),
           thongTin(title: 'Hoa hồng', value: comStr),
           thongTin(title: 'Thời gian ký gửi', value: '30 ngày'),
         ],

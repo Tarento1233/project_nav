@@ -60,7 +60,7 @@ class AdminOrderProductItem extends StatelessWidget {
                 const SizedBox(height: AppSpacing.sm),
 
                 Text(
-                  '${sanPham.gia.toStringAsFixed(0)}đ',
+                  sanPham.gia.toVND(),
 
                   style: AppTypography.gia,
                 ),

@@ -1,18 +1,6 @@
 // features/user/wallet/withdraw_screen.dart
 
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_spacing.dart';
-
-import '../../../../core/widgets/headers/custom_app_bar.dart';
-
-import 'withdraw_balance_card.dart';
-import 'withdraw_amount_input.dart';
-import 'bank_account_card.dart';
-import 'withdraw_summary_card.dart';
-
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -190,7 +178,10 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Thời gian xử lý dự kiến', style: AppTypography.noiDung),
+                      const Expanded(
+                        child: Text('Thời gian xử lý dự kiến', style: AppTypography.noiDung),
+                      ),
+                      const SizedBox(width: AppSpacing.md),
                       Text('Trong vòng 24h làm việc', style: AppTypography.noiDung),
                     ],
                   ),

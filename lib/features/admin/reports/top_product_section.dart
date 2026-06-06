@@ -68,7 +68,7 @@ class TopProductSection extends StatelessWidget {
                         const SizedBox(height: 4),
 
                         Text(
-                          '${item.gia.toStringAsFixed(0)}đ',
+                          item.gia.toVND(),
 
                           style: AppTypography.gia,
                         ),

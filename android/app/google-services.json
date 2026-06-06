@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "779858574647",
+    "project_id": "outlet-fashion-store",
+    "storage_bucket": "outlet-fashion-store.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779858574647:android:29e82148d4b7ac1b4e6eb2",
+        "android_client_info": {
+          "package_name": "com.example.nhom10_ung_dung_ban_do_thoi_trang_outlet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNtaJolucX_9NRJQKlA9R7EG0oe3Rpf8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

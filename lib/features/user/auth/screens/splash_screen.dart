@@ -3,10 +3,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/navigation/root_navigation.dart';
 
 import '../screens/LoginScreen/login_screen.dart';
 
@@ -27,13 +29,21 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void dieuHuong() {
     Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const RootNavigation()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
+      }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -46,7 +46,14 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
               children: [
-                Text('Đơn #${donHang.id}', style: AppTypography.tieuDeNho),
+                Expanded(
+                  child: Text(
+                    'Đơn #${donHang.id}',
+                    style: AppTypography.tieuDeNho,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
 
                 StatusBadge(trangThai: donHang.trangThai),
               ],
@@ -69,7 +76,7 @@ class OrderCard extends StatelessWidget {
                 Text('Tổng thanh toán', style: AppTypography.noiDung),
 
                 Text(
-                  '${donHang.tongTien.toStringAsFixed(0)}đ',
+                  donHang.tongTien.toVND(),
 
                   style: AppTypography.gia,
                 ),

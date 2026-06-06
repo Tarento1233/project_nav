@@ -37,21 +37,44 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(AppRadius.lg),
-
-                topRight: Radius.circular(AppRadius.lg),
-              ),
-
-              child: Image.network(
-                sanPham.hinhAnh.first,
-
-                height: 180,
-
-                width: double.infinity,
-
-                fit: BoxFit.cover,
+            AspectRatio(
+              aspectRatio: 1.1,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(AppRadius.lg),
+                  topRight: Radius.circular(AppRadius.lg),
+                ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      sanPham.hinhAnh.first,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                    if (sanPham.tonKho <= 0 || sanPham.trangThai == 'DA_BAN')
+                      Container(
+                        color: Colors.black.withOpacity(0.5),
+                        child: Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppColors.error.withOpacity(0.85),
+                              borderRadius: BorderRadius.circular(AppRadius.sm),
+                            ),
+                            child: const Text(
+                              'Hết hàng',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
 
@@ -78,7 +101,7 @@ class ProductCard extends StatelessWidget {
                     const SizedBox(height: AppSpacing.sm),
 
                     Text(
-                      '${sanPham.gia.toStringAsFixed(0)}đ',
+                      sanPham.gia.toVND(),
 
                       style: AppTypography.gia.copyWith(fontSize: 18),
                     ),

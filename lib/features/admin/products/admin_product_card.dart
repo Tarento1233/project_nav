@@ -16,15 +16,18 @@ import '../../../core/widgets/badges/status_badge.dart';
 class AdminProductCard extends StatelessWidget {
   final SanPhamModel sanPham;
 
-  final VoidCallback onEdit;
+  final VoidCallback? onEdit;
 
   final VoidCallback onDelete;
+
+  final VoidCallback? onToggleFeatured;
 
   const AdminProductCard({
     super.key,
     required this.sanPham,
-    required this.onEdit,
+    this.onEdit,
     required this.onDelete,
+    this.onToggleFeatured,
   });
 
   @override
@@ -70,7 +73,7 @@ class AdminProductCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.sm),
 
                 Text(
-                  '${sanPham.gia.toStringAsFixed(0)}đ',
+                  sanPham.gia.toVND(),
 
                   style: AppTypography.gia,
                 ),
@@ -88,11 +91,42 @@ class AdminProductCard extends StatelessWidget {
 
           Column(
             children: [
-              IconButton(
-                onPressed: onEdit,
+              Builder(
+                builder: (context) {
+                  final isDANG_BAN = sanPham.trangThai == 'DANG_BAN';
+                  final isConHang = sanPham.tonKho > 0;
+                  final canBeFeatured = isDANG_BAN && isConHang;
 
-                icon: const Icon(Icons.edit_outlined),
+                  return IconButton(
+                    onPressed: canBeFeatured && onToggleFeatured != null
+                        ? onToggleFeatured
+                        : () {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Chỉ sản phẩm Đang bán và Còn hàng mới được thiết lập nổi bật!'),
+                                backgroundColor: AppColors.error,
+                              ),
+                            );
+                          },
+                    icon: Icon(
+                      sanPham.noiBat ? Icons.star_rounded : Icons.star_border_rounded,
+                      color: canBeFeatured
+                          ? (sanPham.noiBat ? Colors.amber : AppColors.textSecondary)
+                          : Colors.grey.withOpacity(0.3),
+                    ),
+                    tooltip: canBeFeatured
+                        ? (sanPham.noiBat ? 'Bỏ nổi bật' : 'Đánh dấu nổi bật')
+                        : 'Không thể thiết lập nổi bật',
+                  );
+                }
               ),
+
+              if (onEdit != null)
+                IconButton(
+                  onPressed: onEdit,
+                  icon: const Icon(Icons.edit_outlined),
+                ),
 
               IconButton(
                 onPressed: onDelete,

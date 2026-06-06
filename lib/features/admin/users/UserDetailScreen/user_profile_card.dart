@@ -7,21 +7,24 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../models/user_model.dart';
 
 class UserProfileCard extends StatelessWidget {
-  const UserProfileCard({super.key});
+  final NguoiDungModel user;
 
-  Widget thongTin({required String title, required String value}) {
+  const UserProfileCard({super.key, required this.user});
+
+  Widget thongTin({required String title, required String value, Color? valueColor}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
-
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
         children: [
           Text(title, style: AppTypography.moTa),
-
-          Text(value, style: AppTypography.noiDung),
+          Text(
+            value,
+            style: AppTypography.noiDung.copyWith(color: valueColor),
+          ),
         ],
       ),
     );
@@ -29,44 +32,41 @@ class UserProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dateStr = '${user.ngayTao.day.toString().padLeft(2, '0')}/${user.ngayTao.month.toString().padLeft(2, '0')}/${user.ngayTao.year}';
+    final biKhoa = user.trangThai == 'BLOCKED';
+
     return Container(
       width: double.infinity,
-
       padding: const EdgeInsets.all(AppSpacing.xl),
-
       decoration: BoxDecoration(
         color: AppColors.surface,
-
         borderRadius: BorderRadius.circular(AppRadius.lg),
-
         boxShadow: AppShadows.cardShadow,
       ),
-
       child: Column(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 45,
-
-            backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+            backgroundImage: NetworkImage(
+              user.avatar.isNotEmpty ? user.avatar : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
+            ),
           ),
-
           const SizedBox(height: AppSpacing.lg),
-
-          Text('Nguyễn Văn A', style: AppTypography.tieuDe),
-
+          Text(user.ten, style: AppTypography.tieuDe),
           const SizedBox(height: 4),
-
-          Text('nguyenvana@gmail.com', style: AppTypography.moTa),
-
+          Text(user.email, style: AppTypography.moTa),
           const SizedBox(height: AppSpacing.lg),
-
-          thongTin(title: 'Role', value: 'USER'),
-
-          thongTin(title: 'Trạng thái', value: 'ACTIVE'),
-
-          thongTin(title: 'Số điện thoại', value: '0901234567'),
-
-          thongTin(title: 'Ngày tham gia', value: '12/05/2026'),
+          thongTin(title: 'Role', value: user.vaiTro),
+          thongTin(
+            title: 'Trạng thái',
+            value: user.trangThai,
+            valueColor: biKhoa ? Colors.red : Colors.green,
+          ),
+          thongTin(
+            title: 'Số điện thoại',
+            value: user.soDienThoai.isNotEmpty ? user.soDienThoai : 'Chưa cập nhật',
+          ),
+          thongTin(title: 'Ngày tham gia', value: dateStr),
         ],
       ),
     );

@@ -28,7 +28,10 @@ class HomeBanner extends StatelessWidget {
         ),
 
         child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.xl),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl,
+            vertical: AppSpacing.md,
+          ),
 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -71,6 +71,8 @@ class ConsignmentProductInfo extends StatelessWidget {
 
                 thongTin('Kích thước', sanPham.kichThuoc),
 
+                thongTin('Số lượng ký gửi', sanPham.tonKho.toString()),
+
                 thongTin('Tình trạng', sanPham.tinhTrang),
               ],
             ),

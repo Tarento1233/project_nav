@@ -35,7 +35,7 @@ class OrderCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text('${tongTien.toStringAsFixed(0)}đ', style: AppTypography.gia),
+          Text(tongTien.toVND(), style: AppTypography.gia),
         ],
       ),
     );

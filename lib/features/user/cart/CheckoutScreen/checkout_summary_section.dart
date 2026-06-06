@@ -54,25 +54,25 @@ class CheckoutSummarySection extends StatelessWidget {
             children: [
               dongThongTin(
                 tieuDe: 'Tạm tính',
-                giaTri: '${store.cartSubtotal.toStringAsFixed(0)}đ',
+                giaTri: store.cartSubtotal.toVND(),
               ),
 
               dongThongTin(
                 tieuDe: 'Phí vận chuyển',
-                giaTri: '${store.shippingFee.toStringAsFixed(0)}đ',
+                giaTri: store.shippingFee.toVND(),
               ),
 
               if (store.discount > 0)
                 dongThongTin(
                   tieuDe: 'Giảm giá',
-                  giaTri: '-${store.discount.toStringAsFixed(0)}đ',
+                  giaTri: '-${store.discount.toVND()}',
                 ),
 
               const Divider(),
 
               dongThongTin(
                 tieuDe: 'Tổng thanh toán',
-                giaTri: '${store.cartTotal.toStringAsFixed(0)}đ',
+                giaTri: store.cartTotal.toVND(),
                 tong: true,
               ),
             ],

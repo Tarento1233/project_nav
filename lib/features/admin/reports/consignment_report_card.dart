@@ -80,7 +80,7 @@ class ConsignmentReportCard extends StatelessWidget {
 
           thongTin(
             title: 'Tổng hoa hồng thu được',
-            value: '${store.adminTotalCommissionEarned.toStringAsFixed(0)}đ',
+            value: store.adminTotalCommissionEarned.toVND(),
             color: Colors.orange,
           ),
 
@@ -141,12 +141,15 @@ class ConsignmentReportCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          totalQuantitySold > 1 
-                              ? 'Giá bán: ${k.giaDuocDuyet.toStringAsFixed(0)}đ x$totalQuantitySold'
-                              : 'Giá bán: ${k.giaDuocDuyet.toStringAsFixed(0)}đ', 
-                          style: AppTypography.moTa,
+                        Expanded(
+                          child: Text(
+                            totalQuantitySold > 1 
+                                ? 'Giá bán: ${k.giaDuocDuyet.toVND()} x$totalQuantitySold'
+                                : 'Giá bán: ${k.giaDuocDuyet.toVND()}', 
+                            style: AppTypography.moTa,
+                          ),
                         ),
+                        const SizedBox(width: AppSpacing.sm),
                         Text('Mức hoa hồng: ${k.phanTramHoaHong.toStringAsFixed(0)}%', style: AppTypography.moTa),
                       ],
                     ),
@@ -154,13 +157,19 @@ class ConsignmentReportCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Shop thu (+): ${commission.toStringAsFixed(0)}đ',
-                          style: AppTypography.moTa.copyWith(color: Colors.orange, fontWeight: FontWeight.bold),
+                        Expanded(
+                          child: Text(
+                            'Shop thu (+): ${commission.toVND()}',
+                            style: AppTypography.moTa.copyWith(color: Colors.orange, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                        Text(
-                          'Trả ví khách (+): ${consignorPayout.toStringAsFixed(0)}đ',
-                          style: AppTypography.moTa.copyWith(color: Colors.green, fontWeight: FontWeight.bold),
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: Text(
+                            'Trả ví khách (+): ${consignorPayout.toVND()}',
+                            textAlign: TextAlign.end,
+                            style: AppTypography.moTa.copyWith(color: Colors.green, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ],
                     ),

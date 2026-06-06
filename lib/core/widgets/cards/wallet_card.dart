@@ -21,7 +21,7 @@ class WalletCard extends StatelessWidget {
   });
 
   String dinhDangTien(double soTien) {
-    return '${soTien.toStringAsFixed(0)}đ';
+    return soTien.toVND();
   }
 
   @override

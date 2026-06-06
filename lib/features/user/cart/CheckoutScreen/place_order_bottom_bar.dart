@@ -45,7 +45,7 @@ class PlaceOrderBottomBar extends StatelessWidget {
                   const SizedBox(height: 4),
 
                   Text(
-                    '${tongTien.toStringAsFixed(0)}đ',
+                    tongTien.toVND(),
 
                     style: AppTypography.gia,
                   ),

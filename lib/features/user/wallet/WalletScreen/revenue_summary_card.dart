@@ -1,14 +1,6 @@
 // features/user/wallet/revenue_summary_card.dart
 
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_shadows.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_typography.dart';
-
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -56,16 +48,38 @@ class RevenueSummaryCard extends StatelessWidget {
     final user = store.currentUser;
     final currentUserId = user?.id ?? '';
 
-    // Lọc thỏa thuận ký gửi của user đã bán thành công
-    final kyGuisDaBan = store.danhSachKyGui
-        .where((k) => k.nguoiDungId == currentUserId && k.trangThai == 'DA_BAN')
+    final isVang = user?.email == 'vanga@gmail.com';
+
+    // 1. Tính Doanh thu ký gửi = Tổng tiền nhận từ các giao dịch bán ký gửi thành công
+    final thuNhaps = store.giaoDichCuaToi
+        .where((g) => g.loai == 'NHAN_TIEN_KY_GUI' && g.trangThai == 'THANH_CONG')
+        .toList();
+    double tongGiaTri = 0;
+    for (var g in thuNhaps) {
+      tongGiaTri += g.soTien;
+    }
+
+    // 2. Tính Hoa hồng shop = Theo logic đối soát đơn hàng hoàn thành ban đầu
+    final completedOrderIds = store.danhSachDonHang
+        .where((o) => o.trangThai == 'HOAN_THANH')
+        .map((o) => o.id)
+        .toSet();
+
+    final completedOrderDetails = store.danhSachChiTietDonHang
+        .where((d) => completedOrderIds.contains(d.donHangId))
         .toList();
 
-    double tongGiaTri = 0;
     double tongHoaHong = 0;
-    for (var k in kyGuisDaBan) {
-      tongGiaTri += k.giaDuocDuyet;
-      tongHoaHong += k.giaDuocDuyet * (k.phanTramHoaHong / 100);
+
+    for (var k in store.danhSachKyGui) {
+      final matchesUser = k.nguoiDungId == currentUserId || (isVang && k.nguoiDungId == 'USER01');
+      if (matchesUser) {
+        final soldDetails = completedOrderDetails.where((d) => d.sanPhamId == k.id).toList();
+        if (soldDetails.isNotEmpty) {
+          final int qty = soldDetails.fold(0, (sum, d) => sum + d.soLuong);
+          tongHoaHong += (k.giaDuocDuyet * qty) * (k.phanTramHoaHong / 100);
+        }
+      }
     }
 
     // Tính tổng tiền đã rút thành công
@@ -79,12 +93,7 @@ class RevenueSummaryCard extends StatelessWidget {
 
     // Format rút gọn thành "k" hoặc "M"
     String formatMoney(double amount) {
-      if (amount >= 1000000) {
-        return '${(amount / 1000000).toStringAsFixed(1)}M';
-      } else if (amount >= 1000) {
-        return '${(amount / 1000).toStringAsFixed(0)}k';
-      }
-      return '${amount.toStringAsFixed(0)}đ';
+      return amount.toVND();
     }
 
     return Row(

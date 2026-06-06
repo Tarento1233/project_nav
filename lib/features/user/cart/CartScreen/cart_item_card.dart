@@ -94,7 +94,7 @@ class CartItemCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
 
                 Text(
-                  '${sanPham.gia.toStringAsFixed(0)}đ',
+                  sanPham.gia.toVND(),
 
                   style: AppTypography.gia,
                 ),

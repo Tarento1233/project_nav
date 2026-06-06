@@ -7,8 +7,13 @@ import '../../../../core/theme/app_radius.dart';
 
 class PasswordTextField extends StatefulWidget {
   final TextEditingController? controller;
+  final String hintText;
 
-  const PasswordTextField({super.key, this.controller});
+  const PasswordTextField({
+    super.key,
+    this.controller,
+    this.hintText = 'Mật khẩu',
+  });
 
   @override
   State<PasswordTextField> createState() => _PasswordTextFieldState();
@@ -25,7 +30,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       obscureText: isHidden,
 
       decoration: InputDecoration(
-        hintText: 'Mật khẩu',
+        hintText: widget.hintText,
 
         prefixIcon: const Icon(Icons.lock),
 

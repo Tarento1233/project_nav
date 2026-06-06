@@ -56,16 +56,16 @@ class AdminOrderSummaryCard extends StatelessWidget {
 
           thongTin(
             title: 'Tạm tính',
-            value: '${donHang.tongTien.toStringAsFixed(0)}đ',
+            value: (donHang.tongTien - donHang.phiVanChuyen).toVND(),
           ),
 
-          thongTin(title: 'Phí vận chuyển', value: '30.000đ'),
+          thongTin(title: 'Phí vận chuyển', value: donHang.phiVanChuyen.toVND()),
 
           const Divider(),
 
           thongTin(
             title: 'Tổng cộng',
-            value: '${(donHang.tongTien + 30000).toStringAsFixed(0)}đ',
+            value: donHang.tongTien.toVND(),
           ),
         ],
       ),

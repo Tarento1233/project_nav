@@ -89,10 +89,10 @@ class ConsignmentRevenueCard extends StatelessWidget {
         children: [
           Text('Doanh thu & thanh toán', style: AppTypography.tieuDeNho),
           const SizedBox(height: AppSpacing.lg),
-          thongTin(title: 'Tổng giá trị hàng', value: '${doanhThu.toStringAsFixed(0)}đ'),
+          thongTin(title: 'Tổng giá trị hàng', value: doanhThu.toVND()),
           if (kyGui.trangThai != 'CHO_DUYET') ...[
-            thongTin(title: 'Bạn nhận được ($phanTramUser%)', value: '${banNhanDuoc.toStringAsFixed(0)}đ'),
-            thongTin(title: 'Hoa hồng Shop (${kyGui.phanTramHoaHong.toStringAsFixed(0)}%)', value: '${(doanhThu * kyGui.phanTramHoaHong / 100).toStringAsFixed(0)}đ'),
+            thongTin(title: 'Bạn nhận được ($phanTramUser%)', value: banNhanDuoc.toVND()),
+            thongTin(title: 'Hoa hồng Shop (${kyGui.phanTramHoaHong.toStringAsFixed(0)}%)', value: (doanhThu * kyGui.phanTramHoaHong / 100).toVND()),
           ],
           thongTin(
             title: 'Trạng thái thanh toán',

@@ -90,12 +90,32 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           PlaceOrderBottomBar(
             tongTien: store.cartTotal,
             onPlaceOrder: () {
-              store.checkout(selectedMethod);
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const MyOrderScreen()),
-                (route) => route.isFirst,
-              );
+              final result = store.checkout(selectedMethod);
+              if (result == 'ERR_STOCK') {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Thông báo'),
+                    content: const Text('Sản phẩm đã hết hàng hoặc không đủ số lượng để thanh toán!'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Đóng'),
+                      ),
+                    ],
+                  ),
+                );
+              } else if (result != null) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MyOrderScreen()),
+                  (route) => route.isFirst,
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Thanh toán thất bại, vui lòng thử lại!')),
+                );
+              }
             },
           ),
         ],

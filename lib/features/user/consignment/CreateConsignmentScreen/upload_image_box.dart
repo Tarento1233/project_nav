@@ -1,20 +1,16 @@
 // features/user/consignment/upload_image_box.dart
 
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/services/firebase_service.dart';
 
-import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/app_typography.dart';
-
-class UploadImageBox extends StatelessWidget {
+class UploadImageBox extends StatefulWidget {
   final String? selectedImageUrl;
   final ValueChanged<String> onImageSelected;
 
@@ -24,11 +20,71 @@ class UploadImageBox extends StatelessWidget {
     required this.onImageSelected,
   });
 
+  @override
+  State<UploadImageBox> createState() => _UploadImageBoxState();
+}
+
+class _UploadImageBoxState extends State<UploadImageBox> {
+  bool _isUploading = false;
+
+  Future<void> _pickAndUploadImage() async {
+    final picker = ImagePicker();
+    try {
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80, // Tối ưu kích thước ảnh trước khi gửi
+      );
+      
+      if (image == null) return;
+
+      if (!mounted) return;
+      setState(() {
+        _isUploading = true;
+      });
+
+      // Hiển thị thông báo bắt đầu upload
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Đang tải ảnh lên ImgBB, vui lòng đợi...'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      final url = await FirebaseService.instance.uploadImage(File(image.path));
+      
+      if (!mounted) return;
+      widget.onImageSelected(url);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Tải ảnh thành công!'),
+          backgroundColor: AppColors.success,
+        ),
+      );
+    } catch (e) {
+      print('Lỗi chọn/tải ảnh: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Lỗi tải ảnh: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isUploading = false;
+        });
+      }
+    }
+  }
+
   void _showImagePicker(BuildContext context) {
-    // Danh sách các ảnh thời trang Unsplash mẫu đẹp mắt để chọn lựa
+    // Danh sách các ảnh thời trang Unsplash mẫu đẹp mắt để chọn lựa làm fallback
     final fashionImages = [
       {
-        'name': 'Áo Blazer Blazer Cao Cấp',
+        'name': 'Áo Blazer Cao Cấp',
         'url': 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea'
       },
       {
@@ -58,15 +114,29 @@ class UploadImageBox extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Chọn ảnh minh họa ký gửi',
+                'Chọn nguồn ảnh',
                 style: AppTypography.tieuDe.copyWith(fontSize: 18),
               ),
               const SizedBox(height: AppSpacing.md),
-              const Text(
-                'Nhấn vào một sản phẩm thời trang mẫu để tải ảnh lên:',
-                style: TextStyle(color: AppColors.textSecondary),
+              
+              // Tùy chọn 1: Chọn ảnh từ máy
+              ListTile(
+                leading: const Icon(Icons.photo_library_outlined, color: AppColors.primary),
+                title: const Text('Chọn ảnh từ Thư viện máy'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickAndUploadImage();
+                },
               ),
-              const SizedBox(height: AppSpacing.lg),
+              const Divider(),
+              
+              const SizedBox(height: AppSpacing.sm),
+              const Text(
+                'Hoặc chọn nhanh từ sản phẩm mẫu:',
+                style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              
               SizedBox(
                 height: 120,
                 child: ListView.separated(
@@ -77,7 +147,7 @@ class UploadImageBox extends StatelessWidget {
                     final img = fashionImages[index];
                     return GestureDetector(
                       onTap: () {
-                        onImageSelected(img['url']!);
+                        widget.onImageSelected(img['url']!);
                         Navigator.pop(context);
                       },
                       child: Column(
@@ -117,10 +187,10 @@ class UploadImageBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasImage = selectedImageUrl != null && selectedImageUrl!.isNotEmpty;
+    final hasImage = widget.selectedImageUrl != null && widget.selectedImageUrl!.isNotEmpty;
 
     return GestureDetector(
-      onTap: () => _showImagePicker(context),
+      onTap: _isUploading ? null : () => _showImagePicker(context),
       child: Container(
         width: double.infinity,
         height: 180,
@@ -132,46 +202,57 @@ class UploadImageBox extends StatelessWidget {
             width: hasImage ? 2.0 : 1.0,
           ),
         ),
-        child: hasImage
-            ? ClipRRect(
-                borderRadius: BorderRadius.circular(AppRadius.lg - 1),
-                child: Stack(
-                  fit: StackFit.expand,
+        child: _isUploading
+            ? const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.network(
-                      selectedImageUrl!,
-                      fit: BoxFit.cover,
-                    ),
-                    Container(
-                      color: Colors.black26,
-                      child: const Center(
-                        child: Icon(
-                          Icons.cached_rounded,
-                          color: Colors.white,
-                          size: 40,
-                        ),
-                      ),
-                    ),
+                    CircularProgressIndicator(color: AppColors.primary),
+                    SizedBox(height: AppSpacing.md),
+                    Text('Đang upload ảnh...', style: TextStyle(color: AppColors.textSecondary)),
                   ],
                 ),
               )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.cloud_upload_outlined,
-                    size: 50,
-                    color: AppColors.primary,
+            : hasImage
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(AppRadius.lg - 1),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.network(
+                          widget.selectedImageUrl!,
+                          fit: BoxFit.cover,
+                        ),
+                        Container(
+                          color: Colors.black26,
+                          child: const Center(
+                            child: Icon(
+                              Icons.cached_rounded,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.cloud_upload_outlined,
+                        size: 50,
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      Text('Tải ảnh sản phẩm', style: AppTypography.tieuDeNho),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Nhấn để chọn ảnh từ máy hoặc mẫu',
+                        style: AppTypography.moTa.copyWith(color: AppColors.primary),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: AppSpacing.md),
-                  Text('Tải ảnh sản phẩm', style: AppTypography.tieuDeNho),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Nhấn để chọn ảnh mẫu thời trang',
-                    style: AppTypography.moTa.copyWith(color: AppColors.primary),
-                  ),
-                ],
-              ),
       ),
     );
   }

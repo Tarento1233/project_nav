@@ -26,7 +26,7 @@ class ConsignmentActionSection extends StatelessWidget {
   void _hienThiDialogDuyet(BuildContext context, StoreProvider store) {
     final giaMongMuon = store.danhSachKyGui.firstWhere((k) => k.id == sanPham.id).giaMongMuon;
     final giaController = TextEditingController(text: giaMongMuon.toStringAsFixed(0));
-    final hoaHongController = TextEditingController(text: '30');
+    final hoaHongController = TextEditingController(text: store.defaultCommissionRate.toStringAsFixed(0));
 
     showDialog(
       context: context,
@@ -66,9 +66,19 @@ class ConsignmentActionSection extends StatelessWidget {
                 final giaDuyet = double.tryParse(giaController.text.trim());
                 final hoaHong = double.tryParse(hoaHongController.text.trim());
 
-                if (giaDuyet == null || giaDuyet <= 0 || hoaHong == null || hoaHong < 0 || hoaHong > 100) {
+                if (giaDuyet == null || giaDuyet <= 0 || hoaHong == null || hoaHong < 0) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Vui lòng nhập giá trị hợp lệ!')),
+                  );
+                  return;
+                }
+
+                if (hoaHong > 20.0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Tỷ lệ hoa hồng không được vượt quá 20%!'),
+                      backgroundColor: AppColors.error,
+                    ),
                   );
                   return;
                 }

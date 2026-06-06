@@ -6,11 +6,14 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 
 class OrderSearchBar extends StatelessWidget {
-  const OrderSearchBar({super.key});
+  final TextEditingController? controller;
+
+  const OrderSearchBar({super.key, this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       decoration: InputDecoration(
         hintText: 'Tìm mã đơn hàng...',
 

@@ -44,7 +44,7 @@ class CartItemCard extends StatelessWidget {
               children: [
                 Text(ten, style: AppTypography.noiDung),
                 const SizedBox(height: 8),
-                Text('${gia.toStringAsFixed(0)}đ', style: AppTypography.gia),
+                Text(gia.toVND(), style: AppTypography.gia),
               ],
             ),
           ),

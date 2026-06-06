@@ -56,20 +56,19 @@ class OrderSummaryCard extends StatelessWidget {
         children: [
           dongThongTin(
             tieuDe: 'Tạm tính',
-            giaTri: '${donHang.tongTien.toStringAsFixed(0)}đ',
+            giaTri: (donHang.tongTien - donHang.phiVanChuyen).toVND(),
           ),
 
           dongThongTin(
             tieuDe: 'Phí vận chuyển',
-            giaTri: '${donHang.phiVanChuyen.toStringAsFixed(0)}đ',
+            giaTri: donHang.phiVanChuyen.toVND(),
           ),
 
           const Divider(),
 
           dongThongTin(
             tieuDe: 'Tổng thanh toán',
-            giaTri:
-                '${(donHang.tongTien + donHang.phiVanChuyen).toStringAsFixed(0)}đ',
+            giaTri: donHang.tongTien.toVND(),
             tong: true,
           ),
         ],

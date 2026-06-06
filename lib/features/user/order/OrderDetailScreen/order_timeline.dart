@@ -40,7 +40,16 @@ class OrderTimeline extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
         children: List.generate(steps.length, (index) {
-          final hoanThanh = index <= 2;
+          bool hoanThanh;
+          if (trangThai == 'HOAN_THANH') {
+            hoanThanh = true;
+          } else if (trangThai == 'DANG_GIAO') {
+            hoanThanh = index <= 2;
+          } else if (trangThai == 'XAC_NHAN' || trangThai == 'DANG_XU_LY') {
+            hoanThanh = index <= 1;
+          } else {
+            hoanThanh = index <= 0;
+          }
 
           return Column(
             children: [

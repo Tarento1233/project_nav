@@ -15,25 +15,30 @@ class ReportStatCard extends StatelessWidget {
 
   final IconData icon;
 
+  final VoidCallback? onTap;
+
   const ReportStatCard({
     super.key,
     required this.title,
     required this.value,
     required this.icon,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-
-        boxShadow: AppShadows.cardShadow,
-      ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+  
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+  
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+  
+          boxShadow: AppShadows.cardShadow,
+        ),
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,6 +73,7 @@ class ReportStatCard extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }

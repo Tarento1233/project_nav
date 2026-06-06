@@ -6,6 +6,7 @@ class NguoiDungModel {
   final String avatar;
   final String vaiTro;
   final DateTime ngayTao;
+  final String trangThai;
 
   NguoiDungModel({
     required this.id,
@@ -15,17 +16,19 @@ class NguoiDungModel {
     required this.avatar,
     required this.vaiTro,
     required this.ngayTao,
+    this.trangThai = 'ACTIVE',
   });
 
   factory NguoiDungModel.tuJson(Map<String, dynamic> json) {
     return NguoiDungModel(
       id: json['id'],
-      ten: json['ten'],
-      email: json['email'],
-      soDienThoai: json['soDienThoai'],
-      avatar: json['avatar'],
-      vaiTro: json['vaiTro'],
+      ten: json['ten'] ?? '',
+      email: json['email'] ?? '',
+      soDienThoai: json['soDienThoai'] ?? '',
+      avatar: json['avatar'] ?? '',
+      vaiTro: json['vaiTro'] ?? 'USER',
       ngayTao: DateTime.parse(json['ngayTao']),
+      trangThai: json['trangThai'] ?? 'ACTIVE',
     );
   }
 
@@ -38,18 +41,25 @@ class NguoiDungModel {
       'avatar': avatar,
       'vaiTro': vaiTro,
       'ngayTao': ngayTao.toIso8601String(),
+      'trangThai': trangThai,
     };
   }
 
-  NguoiDungModel saoChep({String? ten, String? soDienThoai}) {
+  NguoiDungModel saoChep({
+    String? ten,
+    String? soDienThoai,
+    String? vaiTro,
+    String? trangThai,
+  }) {
     return NguoiDungModel(
       id: id,
       ten: ten ?? this.ten,
       email: email,
       soDienThoai: soDienThoai ?? this.soDienThoai,
       avatar: avatar,
-      vaiTro: vaiTro,
+      vaiTro: vaiTro ?? this.vaiTro,
       ngayTao: ngayTao,
+      trangThai: trangThai ?? this.trangThai,
     );
   }
 }
